@@ -132,18 +132,6 @@ class tinyLayerD(Layer):
   def compute_output_shape(self, input_shape):
     return (input_shape[0], self.output_dim)
 
-class StopperCallback(EarlyStopping):
-  def __init__(self, mean_max_target = 0.998):
-    self.mean_max_target = mean_max_target
-    super(StopperCallback, self).__init__(monitor = '', patience = float('inf'), verbose = 1, mode = 'max', baseline = self.mean_max_target)
-	
-  def on_epoch_begin(self, epoch, logs = None):
-    print('mean max of probs:', self.get_monitor_value(logs), '- temp', K.get_value(self.model.get_layer('tinyLayerE').temp))
-
-  def get_monitor_value(self, logs):
-    monitor_value = K.get_value(K.mean(K.max(K.softmax(self.model.get_layer('tinyLayerE').logits), axis = -1)))
-    return monitor_value
-
 
 # the data, split between train and test sets
 data=spio.loadmat(datafile)
