@@ -23,22 +23,19 @@
 #' =============================================================================
 #' Quick Start Examples of TCGA-Assembler Version 2
 #' =============================================================================
+library(glue)
 
 #' Load functions
 source("Module_A.R")
 source("Module_B.R")
 
-#' set data saving path
-sPath1 <- "Part1_DownloadedData"
-sPath2 <- "Part2_BasicDataProcessingResult"
-sPath3 <- "Part3_AdvancedDataProcessingResult"
-
 #' choose a cancer type
 sCancer <- "BRCA"
 
-#' choose some patients
-vPatientID <- c("TCGA-A7-A13F", "TCGA-AO-A12B", "TCGA-AR-A1AP", "TCGA-AR-A1AQ", "TCGA-AR-A1AS", "TCGA-AR-A1AV", "TCGA-AR-A1AW", "TCGA-BH-A0BZ", "TCGA-BH-A0DD", "TCGA-BH-A0DG")
-
+#' set data saving path
+sPath1 <- glue("{sCancer}/raw")
+sPath2 <- glue("{sCancer}/processing")
+sPath3 <- sCancer
 
 #' =============================================================================
 #' Part 1: Downloading Data of 7 different platforms using Module A functions
@@ -47,45 +44,37 @@ vPatientID <- c("TCGA-A7-A13F", "TCGA-AO-A12B", "TCGA-AR-A1AP", "TCGA-AR-A1AQ", 
 #' Download somatic mutation data
 path_somaticMutation <- DownloadSomaticMutationData(cancerType = sCancer,
 						    assayPlatform = "somaticMutation_DNAseq",
-						    inputPatientIDs = vPatientID,
 						    saveFolderName = sPath1)
 
 #' Download copy number alternation data
 path_copyNumber <- DownloadCNAData(cancerType = sCancer,
 				   assayPlatform = "cna_cnv.hg19",
-				   inputPatientIDs = vPatientID,
 				   saveFolderName = sPath1)
 
 #' Download DNA methylation 450 data
 path_methylation_450 <- DownloadMethylationData(cancerType = sCancer,
 						assayPlatform = "methylation_450",
-						inputPatientIDs = vPatientID,
 						saveFolderName = sPath1)
 
 #' Download miRNA expression data
 path_miRNAExp <- DownloadmiRNASeqData(cancerType = sCancer,
 				      assayPlatform = "mir_HiSeq.hg19.mirbase20",
-				      inputPatientIDs = vPatientID,
 				      saveFolderName = sPath1)
 
 #' Download gene expression data
 path_geneExp <- DownloadRNASeqData(cancerType = sCancer,
 				   assayPlatform = "gene.normalized_RNAseq",
-				   inputPatientIDs = vPatientID,
 				   saveFolderName = sPath1)
 
 #' Download RPPA protein expression data
 path_protein_RPPA <- DownloadRPPAData(cancerType = sCancer,
 				      assayPlatform = "protein_RPPA",
-				      inputPatientIDs = vPatientID,
 				      saveFolderName = sPath1)
 
 #' Download iTRAQ protein expression data
-path_protein_iTRAQ <- DownloadCPTACData(cancerType = sCancer,
-					assayPlatform = "proteome_iTRAQ",
-					inputPatientIDs = vPatientID,
-					saveFolderName = sPath1)
-
+#path_protein_iTRAQ <- DownloadCPTACData(cancerType = sCancer,
+#					assayPlatform = "proteome_iTRAQ",
+#					saveFolderName = sPath1)
 
 #' =============================================================================
 #' Part 2: Perform basic processing of downloaded data using Module B functions
@@ -125,10 +114,9 @@ list_protein_RPPA <- ProcessRPPADataWithGeneAnnotation(inputFilePath = path_prot
 						       outputFileFolder = sPath2)
 
 #' Process iTRAQ protein expression data
-list_protein_iTRAQ <-
-	ProcessCPTACData(inputFilePath = path_protein_iTRAQ[1],
-			 outputFileName = paste(sCancer, "protein_iTRAQ", sep = "__"),
-			 outputFileFolder = sPath2)
+#list_protein_iTRAQ <- ProcessCPTACData(inputFilePath = path_protein_iTRAQ[1],
+#				       outputFileName = paste(sCancer, "protein_iTRAQ", sep = "__"),
+#				       outputFileFolder = sPath2)
 
 #' =============================================================================
 #' Part 3: Perform advanced data processing using Module B functions
@@ -167,19 +155,19 @@ l_protein_RPPA    <- list(Des  = list_protein_RPPA$Des,
 			  Data = list_protein_RPPA$Data,
 			  dataType = "protein_RPPA")
 
-l_protein_iTRAQ   <- list(Des  = list_protein_iTRAQ$allPeptides$Des,
-			  Data = list_protein_iTRAQ$allPeptides$Data,
-			  dataType = "protein_iTRAQ")
+#l_protein_iTRAQ   <- list(Des  = list_protein_iTRAQ$allPeptides$Des,
+#			  Data = list_protein_iTRAQ$allPeptides$Data,
+#			  dataType = "protein_iTRAQ")
 
 #' 2nd step: Put multiplatform data in a vector of list objects
-inputDataList      <- vector("list", 7)
+inputDataList      <- vector("list", 6)
 inputDataList[[1]] <- l_somaticMutation
 inputDataList[[2]] <- l_copyNumber
 inputDataList[[3]] <- l_methylation
 inputDataList[[4]] <- l_miRNAExp
 inputDataList[[5]] <- l_geneExp
 inputDataList[[6]] <- l_protein_RPPA
-inputDataList[[7]] <- l_protein_iTRAQ
+#inputDataList[[7]] <- l_protein_iTRAQ
 
 #' 3rd step: Combine multiplatform data
 list_CombinedData <- CombineMultiPlatformData(inputDataList = inputDataList)
@@ -194,4 +182,3 @@ write.table(cbind(list_CombinedData$Des, list_CombinedData$Data),
 	    row.names = FALSE)
 
 #' end
-
