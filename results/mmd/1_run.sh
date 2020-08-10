@@ -1,1 +1,1 @@
-python ../../exp.py ./ mmd_brca.mat 10 16
+python ../../../exp.py ./ $1 10 $2

@@ -5,6 +5,7 @@ library(R.matlab)
 args = commandArgs(trailingOnly=TRUE)
 tissue = args[1]
 phenotype_file = args[2]
+num_features = args[3]
 
 # create gene expression matrix
 xpr <- read_tsv(paste0('esets_', tissue, '_exprs.txt'))
@@ -27,4 +28,4 @@ y <- c(y, y[resamples])
 
 writeMat(paste0(tissue, '.mat'), X = t(X), Y = y, genes = genes)
 
-system2('python', args = c('../../../exp.py', './', paste0(tissue, '.mat'), 10, 16))
+system2('python', args = c('../../../exp.py', './', paste0(tissue, '.mat'), 10, num_features))
