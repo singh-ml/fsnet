@@ -23,7 +23,6 @@ x_minority, y_minority = resample(x[idx_minority,:], y[idx_minority,:],
 x_majority = x[np.logical_not(idx_minority),:]
 y_majority = y[np.logical_not(idx_minority),:]
 
-ds = {'X' : np.concatenate((x_minority, x_majority)), 
-      'Y' : np.concatenate((y_minority, y_majority)) }
+ds = {'X' : x, 'Y' : y }
 
 scio.savemat('metagenome.mat', ds)
