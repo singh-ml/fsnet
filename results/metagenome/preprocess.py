@@ -4,12 +4,12 @@ import numpy as np
 import scipy.io as scio
 from sklearn.utils import resample
 
-y = np.load('HMP2_Metagenome_keggko_summary_Y_filter.npy')
-y = np.transpose(y)
+y = np.load('HMP2_Metagenome_keggko_summary_Y.npy')
+y = np.expand_dims(y, axis=1)
 
 # make feature matrix
-features = np.load('HMP2_Metagenome_keggko_summary_X_filter.npy')
-cov = np.load('HMP2_Metagenome_keggko_summary_cov_filter.npy')
+features = np.load('HMP2_Metagenome_keggko_summary_X.npy')
+cov = np.load('HMP2_Metagenome_keggko_summary_cov.npy')
 x = np.concatenate((np.transpose(features), cov), axis = 1)
 
 # upsample minority class

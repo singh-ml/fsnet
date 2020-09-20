@@ -159,7 +159,7 @@ for ii in range(0,num_exp):
   # balance the classes
   unique_elements, counts_elements = np.unique(y_train, return_counts=True)
   idx_minority = (y_train == unique_elements[np.argmin(counts_elements)])[:,0]
-  #import pdb; pdb.set_trace()
+  
   x_minority, y_minority = resample(x_train[idx_minority,:], 
                                     y_train[idx_minority,:],
                                     replace = True,
@@ -174,7 +174,7 @@ for ii in range(0,num_exp):
   y_test=np.delete(Y,idx,0)
   x_train = np.reshape(x_train, (len(x_train), -1))
   x_test = np.reshape(x_test, (len(x_test), -1))
-
+  
   y_test = to_categorical(y_test)
   y_train = to_categorical(y_train)
 

@@ -1,1 +1,1 @@
-python ../../exp.py ./ metagenome.mat 10 16
+python ../../exp.py ./ metagenome.mat 10 10
