@@ -215,7 +215,6 @@ class tinyLE(Layer):
 data=spio.loadmat(datafile)
 X=data['X']
 Y=data['Y']
-Y = to_categorical(Y)
 
 #Normalization to N(0,1)ds123
 
@@ -233,11 +232,29 @@ for ii in range(0,num_exp):
   idx=random.sample(range(0,X.shape[0]),round(X.shape[0]*0.5))
   x_train=X[idx,:]
   y_train=Y[idx,:]
+
+  # balance the classes
+  unique_elements, counts_elements = np.unique(y_train, return_counts=True)
+  idx_minority = (y_train == unique_elements[np.argmin(counts_elements)])[:,0]
+
+  x_minority, y_minority = resample(x_train[idx_minority,:],
+                                    y_train[idx_minority,:],
+                                    replace = True,
+                                    n_samples = np.max(counts_elements),
+                                    random_state = 42)
+  x_majority = x_train[np.logical_not(idx_minority),:]
+  y_majority = y_train[np.logical_not(idx_minority),:]
+  x_train = np.concatenate((x_minority, x_majority))
+  y_train = np.concatenate((y_minority, y_majority))
+
   x_test=np.delete(X,idx,0)
   y_test=np.delete(Y,idx,0)
   x_train = np.reshape(x_train, (len(x_train), -1))
   x_test = np.reshape(x_test, (len(x_test), -1))
-  
+
+  y_test = to_categorical(y_test)
+  y_train = to_categorical(y_train)
+
   u_train=np.zeros([x_train.shape[1],bins],dtype=float)
   for i in range(0,x_train.shape[1]):
     hist=np.histogram(x_train[:,i],bins)

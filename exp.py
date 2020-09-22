@@ -27,12 +27,12 @@ rd="eta100/"
 datafile=dp+ds
 
 num_exp=20
-num_epochs=6400
+num_epochs=4001
 bins=10
 batch_size=8
 start_temp=10.0
 min_temp=0.01
-lossWeights = {"recon":100, "classacc":1}
+lossWeights = {"recon":1, "classacc":1}
 losses = {"recon": "mean_squared_error", "classacc": "categorical_crossentropy",}
 opt=RMSprop(lr=0.001, decay=0.001/num_epochs)
 
