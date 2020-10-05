@@ -8,9 +8,11 @@ For more details, see the accompanying paper: ["FsNet: Feature Selection Network
 
 ```
 @article{singh2020fsnet,
-  title={FsNet: Feature Selection Network on High-dimensional Biological Data},
-  author={Dinesh Singh and Makoto Yamada},
-  journal={arXiv preprint arXiv:2001.08322},
-  year={2020}
+      title={FsNet: Feature Selection Network on High-dimensional Biological Data}, 
+      author={Dinesh Singh and Héctor Climente-González and Mathis Petrovich and Eiryo Kawakami and Makoto Yamada},
+      year={2020},
+      eprint={2001.08322},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
 }
 ```
