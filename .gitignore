@@ -1,0 +1,6 @@
+*.mat
+
+A-AFFY-*.adf.txt
+E-MTAB-*.idf.txt
+E-MTAB-*.sdrf.txt
+esets_*.txt
